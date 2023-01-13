@@ -1,0 +1,16 @@
+{
+  "name": "js-web-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scrape.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parse": "^5.3.3",
+    "puppeteer": "^19.5.2"
+  }
+}
