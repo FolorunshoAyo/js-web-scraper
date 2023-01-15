@@ -1,10 +1,10 @@
 const { scraper } = require('./pageScraper');
 
-async function scrapeAll(browserInstance, csvFile, dataToScrape){
+async function scrapeAll(browserInstance, scrapperInfo){
 	let browser;
 	try{
 		browser = await browserInstance;
-		await scraper(browser, csvFile, dataToScrape);	
+		await scraper(browser, scrapperInfo);	
 		
 	}
 	catch(err){
@@ -12,4 +12,4 @@ async function scrapeAll(browserInstance, csvFile, dataToScrape){
 	}
 }
 
-module.exports = (browserInstance, csvFile, dataToScrape) => scrapeAll(browserInstance, csvFile, dataToScrape)
+module.exports = (browserInstance, scrapperInfo) => scrapeAll(browserInstance, scrapperInfo)

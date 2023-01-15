@@ -5,4 +5,14 @@ const scraperController = require('./pageController');
 let browserInstance = startBrowser();
 
 // Pass the browser instance to the scraper controller
-scraperController(browserInstance, "marine-engine-parts.csv", {image: "div.productView-img-container a img", name: "h1.productView-title.main-heading"})
+scraperController(browserInstance, 
+    [
+        {
+            csvFile:"marine-engine-parts.csv", 
+            selectors: 
+                {
+                    image: "div.productView-img-container a img", 
+                    name: "h1.productView-title.main-heading"
+                }
+        }
+    ])
