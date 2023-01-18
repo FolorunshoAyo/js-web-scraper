@@ -15,6 +15,7 @@ function scraper(browser, scraperInfo) {
     finalResult[index] = [];
 
     for(const pageDetails of scraperInfo){
+        // Converting each csv file to JSON
         fs.createReadStream(pageDetails.csvFile)
         .pipe(parse({ delimiter: ",", from_line: 2 }))
         .on("data", handleData)
@@ -25,6 +26,7 @@ function scraper(browser, scraperInfo) {
             console.log("CSV parsed successfully");
             console.log(links);
 
+            // performing scrapping for each page in a CSV file
             async function performScraping(){
                 try {
                     let pagePromise = (link) => new Promise(async(resolve, reject) => {
@@ -45,9 +47,9 @@ function scraper(browser, scraperInfo) {
                         await newPage.close();
                     });
 
+                    // Visiting all the links
                     for(const link of links[index]){
                         let scrappedData = await pagePromise(link);
-                        console.log(scrappedData);
                         finalResult[index].push(scrappedData);
                     }
 
