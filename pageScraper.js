@@ -35,11 +35,15 @@ function scraper(browser, scraperInfo) {
 
                         await newPage.goto(link);
 
-                        for(const key in pageDetails.selectors){
-                            if(key === "image") {
-                                dataObj[key] = await newPage.$eval(pageDetails.selectors[key], el => el.src)
-                            }else{
-                                dataObj[key] = await newPage.$eval(pageDetails.selectors[key], el => el.textContent);
+                        for(const key1 in pageDetails.ids){
+                            for(const key2 in pageDetails[key1]){
+                                if(pageDetails.ids[key1][key2].type.toLowerCase() === "image") {
+                                    dataObj[key1] = await newPage.$eval(pageDetails.selectors[key], el => el.src)
+                                }else if(pageDetails.ids[key1][key2].type.toLowerCase() === "html"){
+                                    dataObj[key1] = await newPage.$eval(pageDetails.selectors[key], el => el.innerHTML);
+                                }else{
+                                    dataObj[key1] = await newPage.$eval(pageDetails.selectors[key], el => el.textContent);
+                                }
                             }
                         }
                             

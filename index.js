@@ -9,10 +9,25 @@ scraperController(browserInstance,
     [
         {
             csvFile:"marine-engine-parts.csv", 
-            selectors: 
+            ids: 
                 {
-                    image: "div.productView-img-container a img", 
-                    name: "h1.productView-title.main-heading"
+                    product_title: {
+                        selector: "span[itemprop='name']",
+                        type: "text"
+                    },
+                    product_image: {
+                        selector:  "img.fotorama__img",
+                        type: "image"
+                    }, 
+                    product_sku:{
+                        selector: "div[itemprop='sku']",
+                        type: "text"
+                    },
+                    product_details: {
+                        selector: ".table-wrapper",
+                        type: "HTML"
+                    },
+
                 }
         }
     ])
