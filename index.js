@@ -8,7 +8,7 @@ let browserInstance = startBrowser();
 scraperController(browserInstance, 
     [
         {
-            csvFile:"mitutoyo-shop-links-to-scrape.csv", 
+            csvFile:"all-mitutoyo-links-to-scrape.csv", 
             ids: 
                 {
                     product_name: {
