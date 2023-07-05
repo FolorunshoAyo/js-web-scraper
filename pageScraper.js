@@ -15,7 +15,7 @@ function addToResults(data) {
     for (const scrapedObject of data) {
       finalResult.push(scrapedObject);
     }
-  }else{
+  } else {
     finalResult.push(data);
   }
 
@@ -129,9 +129,19 @@ function scraper(browser, scraperInfo) {
                   await newPage.waitForSelector("#part_group_dropdown > div")
                 ) {
                   // CLICK READ MORE
-                  await newPage.click("button.ExpandablePaneToggle-components__sc-rgnog7-1", {
-                    delay: 500,
-                  });
+
+                  if (
+                    await newPage.$(
+                      "button.ExpandablePaneToggle-components__sc-rgnog7-1"
+                    )
+                  ) {
+                    await newPage.click(
+                      "button.ExpandablePaneToggle-components__sc-rgnog7-1",
+                      {
+                        delay: 500,
+                      }
+                    );
+                  }
 
                   await newPage.click("#part_group_dropdown > div", {
                     delay: 500,
@@ -165,9 +175,7 @@ function scraper(browser, scraperInfo) {
                       );
 
                       const productImage = await newPage.evaluate(function () {
-                        const image = document.querySelector(
-                          "img.kTmVyL"
-                        );
+                        const image = document.querySelector("img.kTmVyL");
 
                         return image.src;
                       });
@@ -207,10 +215,11 @@ function scraper(browser, scraperInfo) {
                             "div.StyledExpandablePane-components__sc-rgnog7-2"
                           );
                           const link = document.URL;
-                          const product_category = "Boat Dynamics";
+                          const product_category = "Engine and drives";
                           const product_specs = document.querySelector(
                             "div.AccordionBodyContent-components__sc-1f1u20f-5"
                           );
+                          const product_variant = document.querySelector("div.DropdownPlaceholder-components__sc-1sy667m-3");
 
                           scrapedData = {
                             product_link: link,
@@ -229,15 +238,18 @@ function scraper(browser, scraperInfo) {
                             product_specs: product_specs
                               ? product_specs.innerHTML
                               : "",
-                            product_category,
-                          }
+                            product_category: product_category,
+                            product_variant: product_variant? product_variant.innerHTML : ""
+                          };
 
                           return scrapedData;
                         });
 
                         dataObj.product_images = imagesArr
-                        ? imagesArr.join(",")
-                        : "";
+                          ? imagesArr.join(",")
+                          : "";
+
+console.log(dataObj.variant_name);
 
                         dataObjArr.push(dataObj);
                       }
