@@ -8,7 +8,7 @@ let browserInstance = startBrowser();
 scraperController(browserInstance, 
     [
         {
-            csvFile:"propeller(volvopenta)-links-to-scrape.csv", 
+            csvFile:"boyesen(rvautoparts)-links.csv", 
             ids: 
                 {
                     product_name: {

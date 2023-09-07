@@ -49,14 +49,23 @@ function scraper(browser, scraperInfo) {
           try {
             let pagePromise = (link) =>
               new Promise(async (resolve, reject) => {
-                const dataObjArr = [];
-                const imagesArr = [];
-                let variantLength = 0;
-                let productImages = 0;
+                // const dataObjArr = [];
+                // const imagesArr = [];
+                // let variantLength = 0;
+                // let productImages = 0;
+
+                let dataObj;
 
                 let newPage = await browser.newPage();
 
-                await newPage.goto(link, { waitUntil: "load", timeout: 0 });
+                // { waitUntil: "load", timeout: 0 }
+                await newPage.setDefaultNavigationTimeout(0);
+
+                await Promise.all([
+                  newPage.waitForNavigation(),
+                  newPage.goto(link),
+                  newPage.waitForSelector("h1")
+                ]);
 
                 // MITUTOYO SCRPAER
                 // ==============================================
@@ -124,7 +133,7 @@ function scraper(browser, scraperInfo) {
                 // }
 
                 // ==============================================
-
+                /*
                 if (
                   await newPage.waitForSelector("#part_group_dropdown > div")
                 ) {
@@ -249,15 +258,62 @@ function scraper(browser, scraperInfo) {
                           ? imagesArr.join(",")
                           : "";
 
-console.log(dataObj.variant_name);
+                        console.log(dataObj.variant_name);
 
                         dataObjArr.push(dataObj);
                       }
                     }
                   }
                 }
+              */
 
-                resolve(dataObjArr);
+                dataObj = await newPage.evaluate(function () {
+                  let scrapedData = {};
+
+                  const product_name = document.querySelector(
+                    "h1"
+                  );
+                  const product_sku = document.querySelector(
+                    "span.product-sku__value"
+                  );
+
+                  const product_price = document.querySelector(
+                    ".product-info__price .price__default strong"
+                  );
+                  
+                  // const product_spec = document.querySelector(
+                  //   "#product-details div.tab-pane:nth-of-type(2)"
+                  // );
+
+                  // const additional_info = document.querySelector(
+                  //   "#technicalSpecifications"
+                  // );
+
+                  const product_description = document.querySelector(
+                    "div.product-description"
+                  );
+
+                  const link = document.URL;
+                  const product_image = document.querySelector("img.product-image");
+
+                  scrapedData = {
+                    product_link: link,
+                    product_name: product_name ? product_name.textContent : "",
+                    product_sku: product_sku ? product_sku.textContent : "",
+                    product_image: product_image? product_image.src : "",
+                    product_price: product_price? product_price.textContent: "",
+                    product_description: product_description? product_description.innerHTML : "",
+                    // product_spec: product_spec? product_spec.innerHTML : "",
+                      // product_long_description: product_long_description
+                      // ? product_long_description.innerHTML
+                      // : "",
+                    // additional_info: additional_info? additional_info.innerHTML : "",
+                  };
+
+                  return scrapedData;
+                });
+
+                resolve(dataObj);
 
                 await newPage.close();
               });
